@@ -457,6 +457,22 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
                 android:value="org.kde.kdeconnect.ui.MainActivity" />
         </activity>
 
+        <!-- OgidaniShare: Screenshot Observer -->
+        <service
+            android:name="org.kde.kdeconnect.plugins.share.ScreenshotObserverService"
+            android:foregroundServiceType="dataSync"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name="org.kde.kdeconnect.plugins.share.ScreenshotSendReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.kde.kdeconnect.plugins.share.SEND_SCREENSHOT" />
+                <action android:name="org.kde.kdeconnect.plugins.share.DISMISS_SCREENSHOT" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name="org.kde.kdeconnect.plugins.clipboard.ClipboardTileService"
             android:icon="@drawable/ic_baseline_content_paste_24"

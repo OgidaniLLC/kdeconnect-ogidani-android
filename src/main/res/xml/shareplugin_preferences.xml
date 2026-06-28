@@ -32,4 +32,27 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         android:summary="@string/share_notification_preference_summary"
         android:title="@string/share_notification_preference" />
 
+    <!-- OgidaniShare: Screenshot auto-transfer settings -->
+    <PreferenceCategory
+        android:title="@string/ogidani_screenshot_category_title">
+
+        <SwitchPreference
+            android:id="@+id/ogidani_screenshot_observer_enabled"
+            android:defaultValue="false"
+            android:key="ogidani_screenshot_observer_enabled"
+            android:summary="@string/ogidani_screenshot_observer_summary"
+            android:title="@string/ogidani_screenshot_observer_title" />
+
+        <ListPreference
+            android:id="@+id/ogidani_screenshot_transfer_mode"
+            android:defaultValue="notify"
+            android:entries="@array/ogidani_screenshot_mode_entries"
+            android:entryValues="@array/ogidani_screenshot_mode_values"
+            android:key="ogidani_screenshot_transfer_mode"
+            android:summary="%s"
+            android:title="@string/ogidani_screenshot_mode_title"
+            android:dependency="ogidani_screenshot_observer_enabled" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

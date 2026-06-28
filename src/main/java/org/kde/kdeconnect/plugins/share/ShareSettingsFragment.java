@@ -7,6 +7,7 @@
 package org.kde.kdeconnect.plugins.share;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,10 +18,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
+
+import org.kde.kdeconnect_tp.R;
 
 import org.kde.kdeconnect.ui.PluginSettingsFragment;
 
@@ -66,6 +70,39 @@ public class ShareSettingsFragment extends PluginSettingsFragment {
                 .getBoolean(PREFERENCE_CUSTOMIZE_DESTINATION, false);
 
         updateFilePickerStatus(customized);
+
+        // OgidaniShare: screenshot observer toggle
+        SwitchPreference screenshotSwitch = preferenceScreen.findPreference("ogidani_screenshot_observer_enabled");
+        ListPreference screenshotMode = preferenceScreen.findPreference("ogidani_screenshot_transfer_mode");
+        if (screenshotSwitch != null) {
+            screenshotSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean enabled = (Boolean) newValue;
+                if (enabled) {
+                    ScreenshotObserverService.start(requireContext());
+                } else {
+                    ScreenshotObserverService.stop(requireContext());
+                }
+                return true;
+            });
+        }
+        if (screenshotMode != null) {
+            screenshotMode.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (ScreenshotTransferMode.AUTO.getKey().equals(newValue)) {
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.ogidani_screenshot_auto_warning_title)
+                            .setMessage(R.string.ogidani_screenshot_auto_warning_message)
+                            .setPositiveButton(R.string.ok, (d, w) -> {
+                                preference.getSharedPreferences().edit()
+                                        .putString(ScreenshotObserverService.PREF_SCREENSHOT_MODE,
+                                                ScreenshotTransferMode.AUTO.getKey()).apply();
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    return false; // handled manually in positive button
+                }
+                return true;
+            });
+        }
     }
 
     private void updateFilePickerStatus(boolean enabled) {

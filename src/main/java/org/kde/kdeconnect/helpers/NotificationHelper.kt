@@ -46,6 +46,10 @@ object NotificationHelper {
         val  highPriorityChannel= NotificationChannelCompat.Builder(Channels.HIGHPRIORITY, NotificationManagerCompat.IMPORTANCE_HIGH)
             .setName(context.getString(R.string.notification_channel_high_priority))
             .build()
+        val screenshotConfirmChannel = NotificationChannelCompat.Builder(Channels.SCREENSHOT_CONFIRM, NotificationManagerCompat.IMPORTANCE_HIGH)
+            .setName(context.getString(R.string.ogidani_notification_channel_screenshot))
+            .setVibrationEnabled(false)
+            .build()
         /* This notification should be highly visible *only* if the user looks at their phone */
         /* It should not be a distraction. It should be a convenient button to press          */
         val continueWatchingChannel = NotificationChannelCompat.Builder(Channels.CONTINUEWATCHING, NotificationManagerCompat.IMPORTANCE_HIGH)
@@ -58,7 +62,7 @@ object NotificationHelper {
             persistentChannel,
             defaultChannel, mediaChannel, fileTransferDownloadChannel, fileTransferDownloadCompleteChannel, fileTransferUploadChannel,
             fileTransferErrorChannel, receiveNotificationChannel, highPriorityChannel,
-            continueWatchingChannel
+            continueWatchingChannel, screenshotConfirmChannel
         )
 
         val nm = NotificationManagerCompat.from(context)
@@ -96,5 +100,8 @@ object NotificationHelper {
         const val RECEIVENOTIFICATION: String = "receive"
         const val HIGHPRIORITY: String = "highpriority"
         const val CONTINUEWATCHING: String = "continuewatching"
+
+        // OgidaniShare
+        const val SCREENSHOT_CONFIRM: String = "ogidani_screenshot"
     }
 }
